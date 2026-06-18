@@ -412,3 +412,8 @@ def mostrar_datos(
 if __name__ == "__main__":
     datos = recuperar_datos()
     mostrar_datos(*datos)
+
+perfil,artistas,canciones,historial,albumes= recuperar_datos()
+
+imagenes = perfil.get("images") or []
+imagen_perfil = imagenes[0]["url"] if imagenes else ""

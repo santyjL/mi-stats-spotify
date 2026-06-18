@@ -2,8 +2,8 @@ from enum import Enum
 
 
 class Colors(Enum):
-    PRIMARY = "#0f0f10"
-    SECONDARY = "#1f1f23"
+    PRIMARY = "#1ed760"
+    SECONDARY = "#111"
     ACCENT = "#00d4ff"
     SUCCESS = "#22c55e"
     WARNING = "#f59e0b"
@@ -26,7 +26,8 @@ hero_style = dict[str, str](
     background=Colors.SECONDARY.value,
     color=Colors.WHITE.value,
     padding="4rem 1rem",
-    text_align="center",
+    text_wrap="pretty",
+    
 )
 
 footer_style = dict[str, str](
