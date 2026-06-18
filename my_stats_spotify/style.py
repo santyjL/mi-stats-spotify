@@ -22,13 +22,6 @@ class FontSize(Enum):
     DISPLAY = "3rem"
 
 
-navbar_style = dict[str, str](
-    background=Colors.PRIMARY.value,
-    color=Colors.WHITE.value,
-    padding="1rem",
-    width="100%",
-)
-
 hero_style = dict[str, str](
     background=Colors.SECONDARY.value,
     color=Colors.WHITE.value,
@@ -56,31 +49,7 @@ texts_style = dict[str, str](
     font_size=FontSize.MD.value,
 )
 
-seo_style = dict[str, str]()
-
-whatsapp_style = dict[str, str](
-    background=Colors.SUCCESS.value,
-    color=Colors.WHITE.value,
-    padding="0.75rem",
-    border_radius="50%",
-    position="fixed",
-    bottom="1.5rem",
-    right="1.5rem",
-)
-
-youtube_style = dict[str, str](
-    padding="1rem",
-)
-
 spotify_style = dict[str, str](
-    padding="1rem",
-)
-
-github_style = dict[str, str](
-    padding="1rem",
-)
-
-weather_style = dict[str, str](
     padding="1rem",
 )
 
@@ -89,17 +58,4 @@ countdown_style = dict[str, str](
     text_align="center",
     color=Colors.ACCENT.value,
     font_size=FontSize.XXL.value,
-)
-
-gallery_style = dict[str, str](
-    display="grid",
-    grid_template_columns="repeat(3, 1fr)",
-    gap="1rem",
-    padding="2rem",
-)
-
-faq_style = dict[str, str](
-    padding="2rem",
-    max_width="800px",
-    margin="0 auto",
 )

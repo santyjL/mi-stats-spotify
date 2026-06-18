@@ -1,3 +1,7 @@
+.web
+.states
+*.db
+*.py[cod]
 .venv/
 __pycache__/
 *.pyc
