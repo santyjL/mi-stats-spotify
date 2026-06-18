@@ -4,7 +4,7 @@ from enum import Enum
 class Colors(Enum):
     PRIMARY = "#1ed760"
     SECONDARY = "#111"
-    ACCENT = "#00d4ff"
+    ACCENT = "#1ed760"
     SUCCESS = "#22c55e"
     WARNING = "#f59e0b"
     DANGER = "#ef4444"
@@ -54,9 +54,16 @@ spotify_style = dict[str, str](
     padding="1rem",
 )
 
-countdown_style = dict[str, str](
-    padding="2rem",
-    text_align="center",
-    color=Colors.ACCENT.value,
-    font_size=FontSize.XXL.value,
+main_style = dict[str, str](
+    background_color=Colors.SECONDARY.value,
+    width="100%"
 )
+
+def flex_item(bg, color_texto=Colors.WHITE.value) :
+    return dict[str,str](
+        flex_basic="0",
+        padding="120px",
+        flex_grow=1,
+        background_color=bg,
+        color=color_texto
+    )
