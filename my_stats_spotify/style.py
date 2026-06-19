@@ -62,8 +62,18 @@ main_style = dict[str, str](
 def flex_item(bg, color_texto=Colors.WHITE.value) :
     return dict[str,str](
         flex_basic="0",
-        padding="120px",
+        padding="50px",
+        align_items="center",
         flex_grow=1,
         background_color=bg,
+        border=f"2px solid {Colors.WHITE.value}",
+        border_radius="25px",
         color=color_texto
     )
+
+texto_item_flex_style = dict[str,str](
+    font_size=FontSize.XL.value, 
+    color=Colors.WHITE.value,
+    font_weight="bold",
+    text_align="center"
+)
