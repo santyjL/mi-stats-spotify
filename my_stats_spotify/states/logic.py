@@ -20,7 +20,7 @@ class StateSpotify(rx.State):
 
     loading: bool = False
     error: str = ""
-    limite: int = 15
+    limite: int = 20
     rango: str = "long_term"
 
     perfil: dict = {}

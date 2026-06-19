@@ -9,7 +9,7 @@ cajita3=flex_item(Colors.SUCCESS.value)
 cajita4=flex_item(Colors.SUCCESS.value)
 cajita5=flex_item(Colors.SUCCESS.value)
 
-def flex_data_spotify(label: str = "Click", href: str = "#") -> rx.Component:
+def flex_data_spotify() -> rx.Component:
     return rx.center(
             rx.flex(
                 #datos de mi perfil
@@ -32,7 +32,7 @@ def flex_data_spotify(label: str = "Click", href: str = "#") -> rx.Component:
                 #top canciones
                 rx.link(
                     rx.text(
-                        "Mis Favoritas(Top 10)",
+                        "Mis Favoritas(Top 20)",
                         style=texto_item_flex_style
                         ),
                     href=ROUTES["top_canciones"],

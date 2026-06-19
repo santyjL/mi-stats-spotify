@@ -92,14 +92,15 @@ main_style = dict[str, str](
     width="100%"
 )
 
-def flex_item(bg, color_texto=Colors.WHITE.value) :
+def flex_item(border_color, color_texto=Colors.WHITE.value) :
     return dict[str,str](
         flex_basic="0",
         padding="50px",
         align_items="center",
         flex_grow=1,
-        background_color=bg,
-        border=f"2px solid {Colors.WHITE.value}",
+        background_color="transparent",
+        border_bottom=f"5px solid {border_color}",
+        border_top=f"3px solid {border_color}",
         border_radius="25px",
         color=color_texto
     )
