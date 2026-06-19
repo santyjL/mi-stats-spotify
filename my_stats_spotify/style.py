@@ -144,3 +144,42 @@ artista_nombre_style = dict[str, str](
     font_size=FontSize.LG.value,
     font_weight="bold",
 )
+
+historial_grid_style = dict[str, str](
+    flex_wrap="wrap",
+    gap="1.5rem",
+    padding="2rem 1rem",
+    width="100%",
+    max_width="960px",
+    margin="0 auto",
+    justify_content="center",
+)
+
+historial_card_style = dict[str, str](
+    align_items="center",
+    gap="1rem",
+    padding="1rem 1.25rem",
+    background_color=Colors.SECONDARY.value,
+    border=f"2px solid {Colors.PRIMARY.value}",
+    border_radius="1rem",
+)
+
+historial_cover_style = dict[str, str](
+    width="72px",
+    height="72px",
+    border_radius="0.5rem",
+    border=f"2px solid {Colors.WHITE.value}",
+    flex_shrink="0",
+)
+
+historial_nombre_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.LG.value,
+    font_weight="bold",
+)
+
+historial_artista_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.SM.value,
+    opacity="0.85",
+)

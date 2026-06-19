@@ -15,6 +15,13 @@ class ArtistaItem(TypedDict):
     image_url: str
 
 
+class HistorialItem(TypedDict):
+    name: str
+    album_name:str
+    artist: str
+    image_url: str
+
+
 class StateSpotify(rx.State):
     """Estado de la app con datos de la Spotify Web API."""
 
@@ -62,6 +69,31 @@ class StateSpotify(rx.State):
             resultado.append(
                 {
                     "name": artista.get("name", "Desconocido"),
+                    "image_url": url,
+                }
+            )
+        return resultado
+
+    @rx.var
+    def historial_items(self) -> list[HistorialItem]:
+        items = self.historial.get("items") or []
+        resultado: list[HistorialItem] = []
+        for entrada in items:
+            track = entrada.get("track", {})
+            artista = (
+                track["artists"][0]["name"]
+                if track.get("artists")
+                else "Desconocido"
+            )
+            album = track.get("album") or {}
+            nombre_album= album.get("name")or []
+            imagenes = album.get("images") or []
+            url = imagenes[0].get("url", "") if imagenes else ""
+            resultado.append(
+                {
+                    "name": track.get("name", "Desconocido"),
+                    "album_name": nombre_album,
+                    "artist": artista,
                     "image_url": url,
                 }
             )
