@@ -34,7 +34,40 @@ footer_style = dict[str, str](
     background=Colors.PRIMARY.value,
     color=Colors.WHITE.value,
     padding="2rem 1rem",
-    text_align="center",
+    width="100%",
+)
+
+footer_link_style = dict[str, str](
+    color=Colors.WHITE.value,
+    text_decoration="none",
+    font_size=FontSize.SM.value,
+    _hover={"opacity": "0.8"},
+)
+
+footer_heading_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.LG.value,
+    font_weight="bold",
+    text_transform="uppercase",
+)
+
+footer_brand_text_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.SM.value,
+    font_weight="medium",
+)
+
+footer_social_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_weight="bold",
+    text_decoration="none",
+    _hover={"opacity": "0.8"},
+)
+
+footer_divider_style = dict[str, str](
+    border_color=Colors.WHITE.value,
+    opacity="0.35",
+    width="100%",
 )
 
 buttons_style = dict[str, str](
