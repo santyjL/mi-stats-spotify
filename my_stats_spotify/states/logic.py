@@ -1,4 +1,5 @@
 import asyncio
+from typing import TypedDict
 
 import reflex as rx
 
@@ -7,6 +8,11 @@ from ..services.spotify_api import (
     _valor_perfil,
     recuperar_datos,
 )
+
+
+class ArtistaItem(TypedDict):
+    name: str
+    image_url: str
 
 
 class StateSpotify(rx.State):
@@ -45,6 +51,21 @@ class StateSpotify(rx.State):
     def top_artistas_nombres(self) -> list[str]:
         items = self.artistas.get("items") or []
         return [artista.get("name", "Desconocido") for artista in items]
+
+    @rx.var
+    def artistas_items(self) -> list[ArtistaItem]:
+        items = self.artistas.get("items") or []
+        resultado: list[ArtistaItem] = []
+        for artista in items:
+            imagenes = artista.get("images") or []
+            url = imagenes[0].get("url", "") if imagenes else ""
+            resultado.append(
+                {
+                    "name": artista.get("name", "Desconocido"),
+                    "image_url": url,
+                }
+            )
+        return resultado
 
     @rx.var
     def top_canciones_texto(self) -> list[str]:
