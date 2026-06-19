@@ -1,9 +1,9 @@
 import reflex as rx
 
-from ..components.hero import hero
-from ..style import main_style
 from ..components.flex_data import flex_data_spotify
 from ..components.footer import footer
+from ..components.hero import hero
+from ..style import main_style
 
 
 def main() -> rx.Component:

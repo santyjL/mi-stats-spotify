@@ -1,14 +1,14 @@
-
-from turtle import position
 import reflex as rx
+
+from ..states.logic import StateSpotify
 from ..style import hero_style, Colors
-from ..services.spotify_api import imagen_perfil
+
 
 def hero() -> rx.Component:
     return rx.box(
         rx.center(
             rx.image(
-                src=imagen_perfil,
+                src=StateSpotify.imagen_perfil,
                 border_radius="50%",
                 border=f"2px solid {Colors.WHITE.value}",
                 margin="20px",
