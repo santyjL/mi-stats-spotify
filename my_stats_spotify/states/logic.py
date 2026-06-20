@@ -52,7 +52,7 @@ class StateSpotify(rx.State):
     loading: bool = False
     error: str = ""
     limite: int = 30
-    rango: str = "long_term"
+    rango: str = "medium_term"
 
     perfil: dict = {}
     artistas: dict = {}

@@ -154,7 +154,7 @@ class SpotifyAPI:
     def top_canciones(
         self,
         limite: int = 30,
-        rango: str = "long_term",
+        rango: str = "medium_term",
     ) -> dict | None:
         """Obtiene las canciones más escuchadas del usuario.
 
@@ -429,7 +429,7 @@ def _mostrar_perfil(perfil: dict | None) -> None:
 
 def recuperar_datos(
     limite: int = 30,
-    rango: str = "long_term",
+    rango: str = "medium_term",
 ) -> tuple[
     dict | None,
     dict | None,
@@ -459,7 +459,7 @@ def recuperar_datos(
     spotify = SpotifyAPI(token)
     perfil = spotify.perfil()
     artistas = spotify.top_artistas(limite=limite, rango=rango)
-    canciones = spotify.top_canciones(limite=limite)
+    canciones = spotify.top_canciones(limite=limite, rango=rango)
     historial = spotify.historial(limite=30)
     albumes = spotify.top_albumes(limite=30, rango=rango)
     reproduccion_actual = spotify.reproduccion_actual()
