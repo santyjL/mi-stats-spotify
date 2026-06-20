@@ -122,7 +122,7 @@ class SpotifyAPI:
     def top_artistas(
         self,
         limite: int = 30,
-        rango: str = "long_term",
+        rango: str = "short_term",
     ) -> dict | None:
         """Obtiene los artistas más escuchados del usuario.
 
@@ -181,6 +181,31 @@ class SpotifyAPI:
             logger.error("Error obteniendo top canciones: %s", exc)
         except ValueError as exc:
             logger.error("Respuesta de top canciones inválida: %s", exc)
+        return None
+
+    def reproduccion_actual(self) -> dict | None:
+        """Obtiene la pista que el usuario está reproduciendo en ese momento.
+
+        Endpoint: ``GET /v1/me/player/currently-playing``
+
+        Returns:
+            Diccionario con ``is_playing`` y ``item`` (datos de la pista),
+            ``None`` si no hay reproducción activa o si la petición falla.
+        """
+        try:
+            response = requests.get(
+                "https://api.spotify.com/v1/me/player/currently-playing",
+                headers=self.headers,
+                timeout=30,
+            )
+            response.raise_for_status()
+            if response.status_code == 204 or not response.content:
+                return None
+            return response.json()
+        except requests.RequestException as exc:
+            logger.error("Error obteniendo reproducción actual: %s", exc)
+        except ValueError as exc:
+            logger.error("Respuesta de reproducción actual inválida: %s", exc)
         return None
 
     def historial(self, limite: int = 30) -> dict | None:
@@ -411,6 +436,8 @@ def recuperar_datos(
     dict | None,
     dict | None,
     list[dict[str, str | int]] | None,
+    dict | None,
+    dict | None,
 ]:
     """Autentica y recupera en bloque todas las estadísticas del usuario.
 
@@ -420,14 +447,14 @@ def recuperar_datos(
             ``long_term``).
 
     Returns:
-        Tupla ``(perfil, artistas, canciones, historial, albumes)``.
-        Cada elemento puede ser ``None`` si falla la autenticación o la
-        petición correspondiente.
+        Tupla ``(perfil, artistas, canciones, historial, albumes,
+        reproduccion_actual, artistas_mes)``. Cada elemento puede ser
+        ``None`` si falla la autenticación o la petición correspondiente.
     """
     token = refresh_access_token()
     if not token:
         logger.error("No se pudo obtener el token de acceso")
-        return None, None, None, None, None
+        return None, None, None, None, None, None, None
 
     spotify = SpotifyAPI(token)
     perfil = spotify.perfil()
@@ -435,8 +462,18 @@ def recuperar_datos(
     canciones = spotify.top_canciones(limite=limite)
     historial = spotify.historial(limite=30)
     albumes = spotify.top_albumes(limite=30, rango=rango)
+    reproduccion_actual = spotify.reproduccion_actual()
+    artistas_mes = spotify.top_artistas(limite=limite, rango="short_term")
 
-    return perfil, artistas, canciones, historial, albumes
+    return (
+        perfil,
+        artistas,
+        canciones,
+        historial,
+        albumes,
+        reproduccion_actual,
+        artistas_mes,
+    )
 
 
 def mostrar_datos(
@@ -445,6 +482,8 @@ def mostrar_datos(
     canciones: dict | None,
     historial: dict | None = None,
     albumes: list[dict[str, str | int]] | None = None,
+    reproduccion_actual: dict | None = None,
+    artistas_mes: dict | None = None,
 ) -> None:
     """Imprime en consola el perfil y todas las estadísticas recuperadas.
 
@@ -454,8 +493,28 @@ def mostrar_datos(
         canciones: Top canciones desde la playlist personal de Spotify.
         historial: Reproducciones recientes.
         albumes: Álbumes calculados por :meth:`SpotifyAPI.top_albumes`.
+        reproduccion_actual: Pista en reproducción.
+        artistas_mes: Top artistas del último mes (``short_term``).
     """
     _mostrar_perfil(perfil)
+
+    print("\n===== REPRODUCCIÓN ACTUAL =====\n")
+
+    if reproduccion_actual and reproduccion_actual.get("item"):
+        track = reproduccion_actual["item"]
+        artista = track["artists"][0]["name"] if track.get("artists") else "Desconocido"
+        estado = "▶" if reproduccion_actual.get("is_playing") else "⏸"
+        print(f"{estado} {track.get('name', 'Desconocido')} - {artista}")
+    else:
+        print("No hay reproducción activa")
+
+    print("\n===== TOP ARTISTAS DEL MES (ÚLTIMAS 4 SEMANAS) =====\n")
+
+    if artistas_mes and artistas_mes.get("items"):
+        for artista in artistas_mes["items"]:
+            print(artista["name"])
+    else:
+        print("No se pudieron obtener los artistas del mes")
 
     print("\n===== TOP ARTISTAS =====\n")
 

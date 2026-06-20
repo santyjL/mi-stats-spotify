@@ -284,3 +284,104 @@ top_canciones_reproducciones_style = dict[str, str](
     text_align="right",
     flex_shrink="0",
 )
+
+mi_perfil_grid_style = dict[str, str](
+    gap="1.5rem",
+    padding="2rem 1rem",
+    width="100%",
+    max_width="1200px",
+    margin="0 auto",
+    align_items="stretch",
+    justify_content="center",
+)
+
+mi_perfil_columna_style = dict[str, str](
+    flex_direction="column",
+    gap="1.5rem",
+    flex="1",
+    min_width="280px",
+)
+
+mi_perfil_card_style = dict[str, str](
+    flex_direction="column",
+    gap="0.75rem",
+    padding="1.5rem",
+    background_color=Colors.SECONDARY.value,
+    border=f"2px solid {Colors.PRIMARY.value}",
+    border_radius="1rem",
+    width="100%",
+)
+
+mi_perfil_card_titulo_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.XL.value,
+    font_weight="bold",
+    text_transform="uppercase",
+)
+
+mi_perfil_card_label_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.SM.value,
+    font_weight="bold",
+    opacity="0.7",
+    text_transform="uppercase",
+)
+
+mi_perfil_card_valor_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.MD.value,
+    font_weight="medium",
+)
+
+reproduccion_cover_style = dict[str, str](
+    width="96px",
+    height="96px",
+    border_radius="0.5rem",
+    border=f"2px solid {Colors.WHITE.value}",
+    flex_shrink="0",
+)
+
+reproduccion_nombre_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.LG.value,
+    font_weight="bold",
+    text_decoration="none",
+    _hover={"opacity": "0.8"},
+)
+
+reproduccion_estado_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.SM.value,
+    font_weight="bold",
+    text_transform="uppercase",
+)
+
+artistas_mes_lista_style = dict[str, str](
+    flex_direction="column",
+    gap="0.75rem",
+    width="100%",
+    max_height="640px",
+    overflow_y="auto",
+)
+
+artista_mes_row_style = dict[str, str](
+    align_items="center",
+    gap="0.75rem",
+    padding="0.5rem 0.75rem",
+    border_bottom=f"1px solid {Colors.PRIMARY.value}",
+    width="100%",
+)
+
+artista_mes_avatar_style = dict[str, str](
+    width="48px",
+    height="48px",
+    border_radius="50%",
+    border=f"2px solid {Colors.WHITE.value}",
+    flex_shrink="0",
+)
+
+artista_mes_nombre_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.MD.value,
+    font_weight="bold",
+)

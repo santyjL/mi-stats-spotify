@@ -37,6 +37,15 @@ class CancionTopItem(TypedDict):
     image_url: str
 
 
+class ReproduccionActualItem(TypedDict):
+    nombre: str
+    artista: str
+    album: str
+    image_url: str
+    spotify_url: str
+    is_playing: bool
+
+
 class StateSpotify(rx.State):
     """Estado de la app con datos de la Spotify Web API."""
 
@@ -50,6 +59,8 @@ class StateSpotify(rx.State):
     canciones: dict = {}
     historial: dict = {}
     albumes: list[dict] = []
+    reproduccion_actual: dict = {}
+    artistas_mes: dict = {}
 
     @rx.var
     def imagen_perfil(self) -> str:
@@ -68,6 +79,54 @@ class StateSpotify(rx.State):
         if producto:
             return _PLANES.get(producto, str(producto))
         return "No disponible"
+
+    @rx.var
+    def user_id(self) -> str:
+        return _valor_perfil(self.perfil, "id")
+
+    @rx.var
+    def pais(self) -> str:
+        return _valor_perfil(self.perfil, "country")
+
+    @rx.var
+    def hay_reproduccion(self) -> bool:
+        return bool(self.reproduccion_actual.get("item"))
+
+    @rx.var
+    def reproduccion_actual_item(self) -> ReproduccionActualItem:
+        track = self.reproduccion_actual.get("item") or {}
+        artista = (
+            track["artists"][0]["name"]
+            if track.get("artists")
+            else "Desconocido"
+        )
+        album = track.get("album") or {}
+        imagenes = album.get("images") or []
+        imagen_url = imagenes[0].get("url", "") if imagenes else ""
+        spotify_url = track.get("external_urls", {}).get("spotify", "")
+        return {
+            "nombre": track.get("name", "Desconocido"),
+            "artista": artista,
+            "album": album.get("name", "Desconocido"),
+            "image_url": imagen_url,
+            "spotify_url": spotify_url,
+            "is_playing": bool(self.reproduccion_actual.get("is_playing")),
+        }
+
+    @rx.var
+    def artistas_mes_items(self) -> list[ArtistaItem]:
+        items = self.artistas_mes.get("items") or []
+        resultado: list[ArtistaItem] = []
+        for artista in items:
+            imagenes = artista.get("images") or []
+            url = imagenes[0].get("url", "") if imagenes else ""
+            resultado.append(
+                {
+                    "name": artista.get("name", "Desconocido"),
+                    "image_url": url,
+                }
+            )
+        return resultado
 
     @rx.var
     def top_artistas_nombres(self) -> list[str]:
@@ -215,6 +274,8 @@ class StateSpotify(rx.State):
         canciones: dict | None,
         historial: dict | None,
         albumes: list | None,
+        reproduccion_actual: dict | None,
+        artistas_mes: dict | None,
     ) -> None:
         if perfil is None:
             self.error = "No se pudo autenticar con Spotify"
@@ -223,6 +284,8 @@ class StateSpotify(rx.State):
             self.canciones = {}
             self.historial = {}
             self.albumes = []
+            self.reproduccion_actual = {}
+            self.artistas_mes = {}
             return
 
         self.perfil = perfil
@@ -230,6 +293,8 @@ class StateSpotify(rx.State):
         self.canciones = canciones or {}
         self.historial = historial or {}
         self.albumes = albumes or []
+        self.reproduccion_actual = reproduccion_actual or {}
+        self.artistas_mes = artistas_mes or {}
         self.error = ""
 
     @rx.event(background=True)
@@ -240,7 +305,15 @@ class StateSpotify(rx.State):
             limite = self.limite
             rango = self.rango
 
-        perfil, artistas, canciones, historial, albumes = await asyncio.to_thread(
+        (
+            perfil,
+            artistas,
+            canciones,
+            historial,
+            albumes,
+            reproduccion_actual,
+            artistas_mes,
+        ) = await asyncio.to_thread(
             recuperar_datos,
             limite,
             rango,
@@ -253,6 +326,8 @@ class StateSpotify(rx.State):
                 canciones,
                 historial,
                 albumes,
+                reproduccion_actual,
+                artistas_mes,
             )
             self.loading = False
 

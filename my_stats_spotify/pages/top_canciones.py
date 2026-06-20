@@ -9,7 +9,6 @@ from ..style import (
     top_canciones_list_style,
     top_canciones_nombre_style,
     top_canciones_num_style,
-    top_canciones_reproducciones_style,
     top_canciones_row_style,
 )
 
