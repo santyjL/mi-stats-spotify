@@ -1,7 +1,7 @@
 import reflex as rx
 
 from ..style import flex_item, Colors, texto_item_flex_style
-from ..routers import ROUTES
+from ..routers import Route
 
 cajita1=flex_item(Colors.SUCCESS.value)
 cajita2=flex_item(Colors.SUCCESS.value)
@@ -18,7 +18,7 @@ def flex_data_spotify() -> rx.Component:
                         "Quien Soy Yo?",
                         style=texto_item_flex_style
                         ),
-                    href=ROUTES["mi_perfil"],
+                    href=Route.MI_PERFIL.value,
                     style=cajita1
                 ),
                 #top mis artistas
@@ -27,7 +27,7 @@ def flex_data_spotify() -> rx.Component:
                         "Mi Top De Artistas Historico",
                         style=texto_item_flex_style
                         ),
-                    href=ROUTES["mi_top_artistas"],
+                    href=Route.MI_TOP_ARTISTAS.value,
                     style=cajita2),
                 #top canciones
                 rx.link(
@@ -35,7 +35,7 @@ def flex_data_spotify() -> rx.Component:
                         "Mis Favoritas(Top 20)",
                         style=texto_item_flex_style
                         ),
-                    href=ROUTES["top_canciones"],
+                    href=Route.TOP_CANCIONES.value,
                     style=cajita3),
                 #historial
                 rx.link(
@@ -43,7 +43,7 @@ def flex_data_spotify() -> rx.Component:
                         "Mis Ultimas Reproduccions ",
                         style=texto_item_flex_style
                         ),
-                    href=ROUTES["historial"],
+                    href=Route.HISTORIAL.value,
                     style=cajita4),
                 #top albumes
                 rx.link(
@@ -51,7 +51,7 @@ def flex_data_spotify() -> rx.Component:
                         "Los Albumes Que Mas He Escuchado",
                         style=texto_item_flex_style
                         ),
-                    href=ROUTES["albumes"],
+                    href=Route.ALBUMES.value,
                     style=cajita5),
             flex_wrap="wrap",
             width="80%",

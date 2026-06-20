@@ -1,8 +1,10 @@
-ROUTES = dict[str, str](
-    home="/",
-    albumes="/mi-top-albumes",
-    historial="historial-de-reproduccion",
-    mi_perfil="mi-perfil",
-    mi_top_artistas="top-artistas",
-    top_canciones="top-canciones"
-)
+from enum import Enum
+
+
+class Route(Enum):
+    HOME = "/"
+    ALBUMES = "/mi-top-albumes"
+    HISTORIAL = "/historial-de-reproduccion"
+    MI_PERFIL = "/mi-perfil"
+    MI_TOP_ARTISTAS = "/top-artistas"
+    TOP_CANCIONES = "/top-canciones"

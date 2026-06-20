@@ -1,6 +1,6 @@
 import reflex as rx
 
-from ..routers import ROUTES
+from ..routers import Route
 from ..states.logic import StateSpotify
 from ..style import (
     Colors,
@@ -21,20 +21,21 @@ def separador() -> rx.Component:
 
 def footer_item(text: str, href: str) -> rx.Component:
     return rx.link(
-        rx.text(text, size="3"),
-        href=href,
+        text,
+        size="3",
         style=footer_link_style,
+        href=href
     )
 
 
 def footer_items_estadisticas() -> rx.Component:
     return rx.flex(
         rx.heading("ESTADÍSTICAS", size="4", weight="bold", as_="h3", style=footer_heading_style),
-        footer_item("Mi Perfil", ROUTES["mi_perfil"]),
-        footer_item("Top Artistas", ROUTES["mi_top_artistas"]),
-        footer_item("Top Canciones", ROUTES["top_canciones"]),
-        footer_item("Historial", ROUTES["historial"]),
-        footer_item("Top Álbumes", ROUTES["albumes"]),
+        footer_item("Mi Perfil", Route.MI_PERFIL.value),
+        footer_item("Top Artistas", Route.MI_TOP_ARTISTAS.value),
+        footer_item("Top Canciones", Route.TOP_CANCIONES.value),
+        footer_item("Historial", Route.HISTORIAL.value),
+        footer_item("Top Álbumes", Route.ALBUMES.value),
         spacing="4",
         text_align=["center", "center", "start"],
         flex_direction="column",
@@ -44,11 +45,11 @@ def footer_items_estadisticas() -> rx.Component:
 def footer_items_navegacion() -> rx.Component:
     return rx.flex(
         rx.heading("NAVEGACIÓN", size="4", weight="bold", as_="h3", style=footer_heading_style),
-        footer_item("Inicio", ROUTES["home"]),
-        footer_item("Quién Soy Yo", ROUTES["mi_perfil"]),
-        footer_item("Mis Favoritas", ROUTES["top_canciones"]),
-        footer_item("Últimas Reproducciones", ROUTES["historial"]),
-        footer_item("Mis Álbumes", ROUTES["albumes"]),
+        footer_item("Inicio", Route.HOME.value),
+        footer_item("Quién Soy Yo", Route.MI_PERFIL.value),
+        footer_item("Mis Favoritas", Route.TOP_CANCIONES.value),
+        footer_item("Últimas Reproducciones", Route.HISTORIAL.value),
+        footer_item("Mis Álbumes", Route.ALBUMES.value),
         spacing="4",
         text_align=["center", "center", "start"],
         flex_direction="column",
@@ -110,8 +111,8 @@ def footer() -> rx.Component:
             rx.divider(style=footer_divider_style),
             rx.hstack(
                 rx.hstack(
-                    footer_item("Inicio", ROUTES["home"]),
-                    footer_item("Mi Perfil", ROUTES["mi_perfil"]),
+                    footer_item("Inicio", Route.HOME.value),
+                    footer_item("Mi Perfil", Route.MI_PERFIL.value),
                     align="center",
                     width="100%",
                 ),

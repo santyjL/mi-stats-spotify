@@ -6,15 +6,15 @@ from .pages.historial import historial
 from .pages.mi_perfil import mi_perfil
 from .pages.mi_top_artistas import mi_top_artistas
 from .pages.top_canciones import top_canciones
-from .routers import ROUTES
+from .routers import Route
 from .states.logic import StateSpotify
 
 
 app = rx.App()
-app.add_page(home, route=ROUTES["home"], on_load=StateSpotify.cargar_datos)
-app.add_page(albumes, route=ROUTES["albumes"], on_load=StateSpotify.cargar_datos)
-app.add_page(historial, route=ROUTES["historial"], on_load=StateSpotify.cargar_datos)
-app.add_page(mi_perfil, route=ROUTES["mi_perfil"], on_load=StateSpotify.cargar_datos)
-app.add_page(mi_top_artistas, route=ROUTES["mi_top_artistas"], on_load=StateSpotify.cargar_datos)
-app.add_page(top_canciones, route=ROUTES["top_canciones"], on_load=StateSpotify.cargar_datos)
+app.add_page(home, route=Route.HOME.value, on_load=StateSpotify.cargar_datos)
+app.add_page(albumes, route=Route.ALBUMES.value, on_load=StateSpotify.cargar_datos)
+app.add_page(historial, route=Route.HISTORIAL.value, on_load=StateSpotify.cargar_datos)
+app.add_page(mi_perfil, route=Route.MI_PERFIL.value, on_load=StateSpotify.cargar_datos)
+app.add_page(mi_top_artistas, route=Route.MI_TOP_ARTISTAS.value, on_load=StateSpotify.cargar_datos)
+app.add_page(top_canciones, route=Route.TOP_CANCIONES.value, on_load=StateSpotify.cargar_datos)
 
