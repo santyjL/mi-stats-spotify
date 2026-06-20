@@ -33,10 +33,6 @@ def cancion_row(cancion: CancionTopItem) -> rx.Component:
             cancion["artista"],
             style=top_canciones_artista_style,
         ),
-        rx.text(
-            cancion["reproducciones"],
-            style=top_canciones_reproducciones_style,
-        ),
         style=top_canciones_row_style,
         width="100%",
     )

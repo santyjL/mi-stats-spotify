@@ -33,8 +33,8 @@ class CancionTopItem(TypedDict):
     num: int
     nombre: str
     artista: str
+    album: str
     image_url: str
-    reproducciones: int
 
 
 class StateSpotify(rx.State):
@@ -42,7 +42,7 @@ class StateSpotify(rx.State):
 
     loading: bool = False
     error: str = ""
-    limite: int = 20
+    limite: int = 30
     rango: str = "long_term"
 
     perfil: dict = {}
@@ -165,25 +165,43 @@ class StateSpotify(rx.State):
     @rx.var
     def top_canciones_items(self) -> list[CancionTopItem]:
         items = self.canciones.get("items") or []
+
         resultado: list[CancionTopItem] = []
+
         for indice, track in enumerate(items, start=1):
+
             artista = (
                 track["artists"][0]["name"]
                 if track.get("artists")
                 else "Desconocido"
             )
+
             album = track.get("album") or {}
+
             imagenes = album.get("images") or []
-            url = imagenes[0].get("url", "") if imagenes else ""
+
+            url = (
+                imagenes[0].get("url", "")
+                if imagenes
+                else ""
+            )
+
             resultado.append(
                 {
                     "num": indice,
-                    "nombre": track.get("name", "Desconocido"),
+                    "nombre": track.get(
+                        "name",
+                        "Desconocido",
+                    ),
                     "artista": artista,
+                    "album": album.get(
+                        "name",
+                        "Desconocido",
+                    ),
                     "image_url": url,
-                    "reproducciones": int(track.get("popularity", 0)),
                 }
             )
+
         return resultado
 
     @rx.var

@@ -19,12 +19,6 @@ Scopes recomendados al generar el refresh token:
 - ``playlist-read-private`` — playlists personales (top canciones)
 """
 
-_NOMBRES_PLAYLIST_TOP_CANCIONES: tuple[str, ...] = (
-    "tus canciones principales de todos los tiempos",
-    "tu top de canciones más escuchadas",
-    "your top songs of all time",
-    "your top tracks of all time",
-)
 
 import logging
 import os
@@ -127,7 +121,7 @@ class SpotifyAPI:
 
     def top_artistas(
         self,
-        limite: int = 20,
+        limite: int = 30,
         rango: str = "long_term",
     ) -> dict | None:
         """Obtiene los artistas más escuchados del usuario.
@@ -159,7 +153,7 @@ class SpotifyAPI:
 
     def top_canciones(
         self,
-        limite: int = 20,
+        limite: int = 30,
         rango: str = "long_term",
     ) -> dict | None:
         """Obtiene las canciones más escuchadas del usuario.
@@ -189,7 +183,7 @@ class SpotifyAPI:
             logger.error("Respuesta de top canciones inválida: %s", exc)
         return None
 
-    def historial(self, limite: int = 20) -> dict | None:
+    def historial(self, limite: int = 30) -> dict | None:
         """Obtiene el historial de reproducción reciente.
 
         Endpoint: ``GET /v1/me/player/recently-played``
@@ -216,63 +210,10 @@ class SpotifyAPI:
             logger.error("Respuesta de historial inválida: %s", exc)
         return None
 
-    def _playlists_pagina(self, limite: int = 50, offset: int = 0) -> dict | None:
-        """Obtiene una página de las playlists del usuario autenticado."""
-        try:
-            response = requests.get(
-                "https://api.spotify.com/v1/me/playlists",
-                headers=self.headers,
-                params={"limit": limite, "offset": offset},
-                timeout=30,
-            )
-            response.raise_for_status()
-            return response.json()
-        except requests.RequestException as exc:
-            logger.error("Error obteniendo playlists del usuario: %s", exc)
-        except ValueError as exc:
-            logger.error("Respuesta de playlists inválida: %s", exc)
-        return None
-
-    def _coincide_playlist_top_canciones(self, nombre: str) -> bool:
-        """Comprueba si el nombre corresponde a la playlist de top histórico."""
-        nombre_norm = nombre.casefold().strip()
-        for objetivo in _NOMBRES_PLAYLIST_TOP_CANCIONES:
-            if objetivo in nombre_norm or nombre_norm in objetivo:
-                return True
-        return (
-            "canciones principales" in nombre_norm
-            and "todos los tiempos" in nombre_norm
-        )
-
-    def buscar_playlist_top_canciones(self) -> dict | None:
-        """Localiza la playlist automática de canciones principales del usuario."""
-        offset = 0
-        limite = 50
-
-        while True:
-            data = self._playlists_pagina(limite=limite, offset=offset)
-            if not data:
-                return None
-
-            for playlist in data.get("items") or []:
-                nombre = playlist.get("name", "")
-                if self._coincide_playlist_top_canciones(nombre):
-                    return playlist
-
-            if not data.get("next"):
-                break
-            offset += limite
-
-        logger.error(
-            "No se encontró la playlist de top canciones "
-            "(buscada: 'Tus canciones principales de todos los tiempos')"
-        )
-        return None
-
     def canciones_playlist(
         self,
         playlist_id: str,
-        limite: int = 20,
+        limite: int = 30,
         offset: int = 0,
     ) -> dict | None:
         """Obtiene las pistas de una playlist.
@@ -294,43 +235,57 @@ class SpotifyAPI:
             logger.error("Respuesta de canciones de playlist inválida: %s", exc)
         return None
 
-    def top_canciones_desde_playlist(self, limite: int = 20) -> dict | None:
-        """Obtiene las primeras pistas de la playlist de top histórico de Spotify.
+    def top_canciones(
+        self,
+        limite: int = 30,
+        rango: str = "long_term",
+    ) -> dict | None:
+        """
+        Obtiene las canciones más escuchadas del usuario.
 
-        Busca en la biblioteca del usuario la playlist generada por Spotify
-        (p. ej. ``Tus canciones principales de todos los tiempos``) y devuelve
-        sus primeras pistas en el mismo formato que ``top_canciones``.
+        Rangos:
+            short_term  -> últimas semanas
+            medium_term -> últimos meses
+            long_term   -> histórico
 
         Args:
-            limite: Número de canciones a devolver.
+            limite: cantidad de canciones.
+            rango: periodo de análisis.
 
         Returns:
-            Diccionario con clave ``items`` (lista de pistas), o ``None``.
+            {
+                "items": [...]
+            }
         """
-        playlist = self.buscar_playlist_top_canciones()
-        if not playlist:
-            return None
 
-        playlist_id = playlist.get("id")
-        if not playlist_id:
-            logger.error("La playlist de top canciones no tiene ID")
-            return None
+        try:
+            response = requests.get(
+                "https://api.spotify.com/v1/me/top/tracks",
+                headers=self.headers,
+                params={
+                    "limit": limite,
+                    "time_range": rango,
+                },
+                timeout=30,
+            )
 
-        data = self.canciones_playlist(playlist_id=playlist_id, limite=limite)
-        if not data:
-            return None
+            response.raise_for_status()
 
-        pistas: list[dict] = []
-        for entrada in data.get("items") or []:
-            track = entrada.get("track")
-            if track and track.get("id"):
-                pistas.append(track)
+            return response.json()
 
-        if not pistas:
-            logger.error("La playlist de top canciones no contiene pistas")
-            return None
+        except requests.RequestException as exc:
+            logger.error(
+                "Error obteniendo top canciones: %s",
+                exc,
+            )
 
-        return {"items": pistas}
+        except ValueError as exc:
+            logger.error(
+                "Respuesta inválida de top canciones: %s",
+                exc,
+            )
+
+        return None
 
     def top_albumes(
         self,
@@ -448,7 +403,7 @@ def _mostrar_perfil(perfil: dict | None) -> None:
 
 
 def recuperar_datos(
-    limite: int = 10,
+    limite: int = 30,
     rango: str = "long_term",
 ) -> tuple[
     dict | None,
@@ -477,9 +432,9 @@ def recuperar_datos(
     spotify = SpotifyAPI(token)
     perfil = spotify.perfil()
     artistas = spotify.top_artistas(limite=limite, rango=rango)
-    canciones = spotify.top_canciones_desde_playlist(limite=limite)
-    historial = spotify.historial(limite=20)
-    albumes = spotify.top_albumes(limite=20, rango=rango)
+    canciones = spotify.top_canciones(limite=limite)
+    historial = spotify.historial(limite=30)
+    albumes = spotify.top_albumes(limite=30, rango=rango)
 
     return perfil, artistas, canciones, historial, albumes
 
