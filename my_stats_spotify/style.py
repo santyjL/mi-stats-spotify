@@ -183,3 +183,47 @@ historial_artista_style = dict[str, str](
     font_size=FontSize.SM.value,
     opacity="0.85",
 )
+
+albumes_grid_style = dict[str, str](
+    flex_wrap="wrap",
+    gap="1.5rem",
+    padding="2rem 1rem",
+    width="100%",
+    max_width="960px",
+    margin="0 auto",
+    justify_content="center",
+)
+
+album_card_style = dict[str, str](
+    flex_direction="column",
+    align_items="center",
+    gap="0.75rem",
+    padding="1rem 1.25rem",
+    background_color=Colors.SECONDARY.value,
+    border=f"2px solid {Colors.PRIMARY.value}",
+    border_radius="1rem",
+)
+
+album_cover_style = dict[str, str](
+    width="140px",
+    height="140px",
+    border_radius="0.5rem",
+    border=f"2px solid {Colors.WHITE.value}",
+    flex_shrink="0",
+)
+
+album_nombre_link_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.LG.value,
+    font_weight="bold",
+    text_align="center",
+    text_decoration="none",
+    _hover={"opacity": "0.8"},
+)
+
+album_artista_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.SM.value,
+    opacity="0.85",
+    text_align="center",
+)

@@ -243,9 +243,14 @@ class SpotifyAPI:
             peso = total - posicion
             if album_id not in conteo:
                 artista = track["artists"][0]["name"] if track.get("artists") else "Desconocido"
+                imagenes = album.get("images") or []
+                imagen_url = imagenes[0].get("url", "") if imagenes else ""
+                spotify_url = album.get("external_urls", {}).get("spotify", "")
                 conteo[album_id] = {
                     "nombre": album.get("name", "Desconocido"),
                     "artista": artista,
+                    "image_url": imagen_url,
+                    "spotify_url": spotify_url,
                     "puntuacion": 0,
                 }
             conteo[album_id]["puntuacion"] = int(conteo[album_id]["puntuacion"]) + peso
