@@ -1,15 +1,24 @@
 from enum import Enum
 
+from reflex_base.vars.base import transform
+
 
 class Colors(Enum):
     PRIMARY = "#1ed760"
     SECONDARY = "#111"
     ACCENT = "#1ed760"
-    SUCCESS = "#22c55e"
+    SUCCESS = "#FC5"
     WARNING = "#f59e0b"
     DANGER = "#ef4444"
     WHITE = "#ffffff"
     BLACK = "#000000"
+
+    #colores_box
+    CELESTE = "#48E"
+    AMARILLO ="#C80"
+    MAGENTA = "#B39"
+    SALMON = "#f55"
+    VERDE_RADIACTIVO="#2E6"
 
 
 class FontSize(Enum):
@@ -92,24 +101,36 @@ main_style = dict[str, str](
     width="100%"
 )
 
-def flex_item(border_color, color_texto=Colors.WHITE.value) :
+def flex_item(border_color) :
     return dict[str,str](
         flex_basic="0",
-        padding="50px",
+        padding="30px",
         align_items="center",
         flex_grow=1,
-        background_color="transparent",
+        background=f"linear-gradient(360deg, transparent, {border_color} 99%)",
         border_bottom=f"5px solid {border_color}",
         border_top=f"3px solid {border_color}",
         border_radius="25px",
-        color=color_texto
+        box_shadow="none",
+        transition="box-shadow 0.4s 0.1s",
+        _hover = {
+            "box-shadow": f"0 0 50px 10px {border_color}"
+        }
     )
 
-texto_item_flex_style = dict[str,str](
-    font_size=FontSize.XL.value, 
+flex_link_style = dict[str,str](
     color=Colors.WHITE.value,
     font_weight="bold",
-    text_align="center"
+    font_size=FontSize.XL.value, 
+    align="center",
+    _hover={
+        "text-decorate" : "none",
+        "color" : f"{Colors.WHITE.value}",
+    },
+    _link={
+        "text-decorate" : "none",
+        "color" : f"{Colors.WHITE.value}",
+    }
 )
 
 top_artistas_grid_style = dict[str, str](
