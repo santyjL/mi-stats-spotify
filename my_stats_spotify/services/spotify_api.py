@@ -208,6 +208,142 @@ class SpotifyAPI:
             logger.error("Respuesta de historial inválida: %s", exc)
         return None
 
+    def _historial_pagina(self, limite: int = 50, before: int | None = None) -> dict | None:
+        """Obtiene una página del historial de reproducción."""
+        params: dict[str, int] = {"limit": limite}
+        if before is not None:
+            params["before"] = before
+        try:
+            response = requests.get(
+                "https://api.spotify.com/v1/me/player/recently-played",
+                headers=self.headers,
+                params=params,
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.RequestException as exc:
+            logger.error("Error obteniendo historial paginado: %s", exc)
+        except ValueError as exc:
+            logger.error("Respuesta de historial paginado inválida: %s", exc)
+        return None
+
+    def top_canciones_historicas(
+        self,
+        limite: int = 20,
+        rango: str = "long_term",
+    ) -> list[dict[str, str | int]] | None:
+        """Calcula el top de canciones con reproducciones totales.
+
+        Pagina el historial reciente para contar reproducciones por pista.
+        Si hay menos de ``limite`` pistas con datos, completa con el top
+        histórico de ``GET /v1/me/top/tracks`` (``long_term``).
+
+        Args:
+            limite: Cantidad de canciones a devolver.
+            rango: Ventana temporal del top de Spotify como respaldo.
+
+        Returns:
+            Lista ordenada con ``num``, ``nombre``, ``artista``,
+            ``image_url`` y ``reproducciones``.
+        """
+        conteo: dict[str, dict[str, str | int]] = {}
+        before: int | None = None
+        paginas = 0
+        max_paginas = 50
+
+        while paginas < max_paginas:
+            data = self._historial_pagina(limite=50, before=before)
+            if not data:
+                break
+
+            items = data.get("items") or []
+            if not items:
+                break
+
+            for entrada in items:
+                track = entrada.get("track") or {}
+                track_id = track.get("id")
+                if not track_id:
+                    continue
+
+                if track_id not in conteo:
+                    artista = (
+                        track["artists"][0]["name"]
+                        if track.get("artists")
+                        else "Desconocido"
+                    )
+                    album = track.get("album") or {}
+                    imagenes = album.get("images") or []
+                    imagen_url = imagenes[0].get("url", "") if imagenes else ""
+                    conteo[track_id] = {
+                        "track_id": track_id,
+                        "nombre": track.get("name", "Desconocido"),
+                        "artista": artista,
+                        "image_url": imagen_url,
+                        "reproducciones": 0,
+                    }
+                conteo[track_id]["reproducciones"] = (
+                    int(conteo[track_id]["reproducciones"]) + 1
+                )
+
+            cursors = data.get("cursors") or {}
+            nuevo_before = cursors.get("before")
+            if not nuevo_before or nuevo_before == before:
+                break
+            before = nuevo_before
+            paginas += 1
+
+        top_spotify = self.top_canciones(limite=limite, rango=rango)
+        if top_spotify and top_spotify.get("items"):
+            for track in top_spotify["items"]:
+                track_id = track.get("id")
+                if not track_id:
+                    continue
+                if track_id in conteo:
+                    continue
+                artista = (
+                    track["artists"][0]["name"]
+                    if track.get("artists")
+                    else "Desconocido"
+                )
+                album = track.get("album") or {}
+                imagenes = album.get("images") or []
+                imagen_url = imagenes[0].get("url", "") if imagenes else ""
+                conteo[track_id] = {
+                    "track_id": track_id,
+                    "nombre": track.get("name", "Desconocido"),
+                    "artista": artista,
+                    "image_url": imagen_url,
+                    "reproducciones": 0,
+                }
+
+        if not conteo:
+            logger.error("No se pudieron obtener canciones históricas")
+            return None
+
+        ordenados = sorted(
+            conteo.values(),
+            key=lambda cancion: (
+                int(cancion["reproducciones"]),
+                cancion["nombre"],
+            ),
+            reverse=True,
+        )[:limite]
+
+        resultado: list[dict[str, str | int]] = []
+        for indice, cancion in enumerate(ordenados, start=1):
+            resultado.append(
+                {
+                    "num": indice,
+                    "nombre": str(cancion["nombre"]),
+                    "artista": str(cancion["artista"]),
+                    "image_url": str(cancion["image_url"]),
+                    "reproducciones": int(cancion["reproducciones"]),
+                }
+            )
+        return resultado
+
     def top_albumes(
         self,
         limite: int = 10,
@@ -332,6 +468,7 @@ def recuperar_datos(
     dict | None,
     dict | None,
     list[dict[str, str | int]] | None,
+    list[dict[str, str | int]] | None,
 ]:
     """Autentica y recupera en bloque todas las estadísticas del usuario.
 
@@ -341,14 +478,15 @@ def recuperar_datos(
             ``long_term``).
 
     Returns:
-        Tupla ``(perfil, artistas, canciones, historial, albumes)``.
+        Tupla ``(perfil, artistas, canciones, historial, albumes,
+        top_canciones_historicas)``.
         Cada elemento puede ser ``None`` si falla la autenticación o la
         petición correspondiente.
     """
     token = refresh_access_token()
     if not token:
         logger.error("No se pudo obtener el token de acceso")
-        return None, None, None, None, None
+        return None, None, None, None, None, None
 
     spotify = SpotifyAPI(token)
     perfil = spotify.perfil()
@@ -356,8 +494,12 @@ def recuperar_datos(
     canciones = spotify.top_canciones(limite=limite, rango=rango)
     historial = spotify.historial(limite=20)
     albumes = spotify.top_albumes(limite=10, rango=rango)
+    top_canciones_historicas = spotify.top_canciones_historicas(
+        limite=20,
+        rango=rango,
+    )
 
-    return perfil, artistas, canciones, historial, albumes
+    return perfil, artistas, canciones, historial, albumes, top_canciones_historicas
 
 
 def mostrar_datos(
@@ -366,6 +508,7 @@ def mostrar_datos(
     canciones: dict | None,
     historial: dict | None = None,
     albumes: list[dict[str, str | int]] | None = None,
+    top_canciones_historicas: list[dict[str, str | int]] | None = None,
 ) -> None:
     """Imprime en consola el perfil y todas las estadísticas recuperadas.
 
@@ -412,6 +555,17 @@ def mostrar_datos(
             print(f"{album['nombre']} - {album['artista']} ({album['puntuacion']})")
     else:
         print("No se pudieron calcular los álbumes")
+
+    print("\n===== TOP CANCIONES HISTÓRICAS (TOP 20) =====\n")
+
+    if top_canciones_historicas:
+        for cancion in top_canciones_historicas:
+            print(
+                f"{cancion['num']}. {cancion['nombre']} - {cancion['artista']} "
+                f"({cancion['reproducciones']} reproducciones)"
+            )
+    else:
+        print("No se pudieron obtener las canciones históricas")
 
 
 if __name__ == "__main__":

@@ -227,3 +227,60 @@ album_artista_style = dict[str, str](
     opacity="0.85",
     text_align="center",
 )
+
+top_canciones_list_style = dict[str, str](
+    flex_direction="column",
+    width="80%",
+    margin="0 auto",
+    padding="2rem 1rem",
+)
+
+top_canciones_row_style = dict[str, str](
+    align_items="center",
+    gap="1.25rem",
+    padding="1rem 0",
+    border_bottom=f"2px solid {Colors.PRIMARY.value}",
+    width="100%",
+)
+
+top_canciones_num_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.XL.value,
+    font_weight="bold",
+    min_width="2rem",
+    text_align="center",
+    flex_shrink="0",
+)
+
+top_canciones_cover_style = dict[str, str](
+    width="64px",
+    height="64px",
+    border_radius="0.5rem",
+    border=f"2px solid {Colors.WHITE.value}",
+    flex_shrink="0",
+)
+
+top_canciones_nombre_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.LG.value,
+    font_weight="bold",
+    flex="1",
+    min_width="0",
+)
+
+top_canciones_artista_style = dict[str, str](
+    color=Colors.WHITE.value,
+    font_size=FontSize.SM.value,
+    opacity="0.85",
+    flex="1",
+    min_width="0",
+)
+
+top_canciones_reproducciones_style = dict[str, str](
+    color=Colors.PRIMARY.value,
+    font_size=FontSize.MD.value,
+    font_weight="bold",
+    min_width="6rem",
+    text_align="right",
+    flex_shrink="0",
+)

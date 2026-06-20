@@ -29,6 +29,14 @@ class AlbumItem(TypedDict):
     spotify_url: str
 
 
+class CancionTopItem(TypedDict):
+    num: int
+    nombre: str
+    artista: str
+    image_url: str
+    reproducciones: int
+
+
 class StateSpotify(rx.State):
     """Estado de la app con datos de la Spotify Web API."""
 
@@ -42,6 +50,7 @@ class StateSpotify(rx.State):
     canciones: dict = {}
     historial: dict = {}
     albumes: list[dict] = []
+    top_canciones_historicas: list[dict] = []
 
     @rx.var
     def imagen_perfil(self) -> str:
@@ -155,6 +164,21 @@ class StateSpotify(rx.State):
         return resultado
 
     @rx.var
+    def top_canciones_items(self) -> list[CancionTopItem]:
+        resultado: list[CancionTopItem] = []
+        for cancion in self.top_canciones_historicas:
+            resultado.append(
+                {
+                    "num": int(cancion.get("num", 0)),
+                    "nombre": cancion.get("nombre", "Desconocido"),
+                    "artista": cancion.get("artista", "Desconocido"),
+                    "image_url": cancion.get("image_url", ""),
+                    "reproducciones": int(cancion.get("reproducciones", 0)),
+                }
+            )
+        return resultado
+
+    @rx.var
     def tiene_datos(self) -> bool:
         return bool(self.perfil)
 
@@ -165,6 +189,7 @@ class StateSpotify(rx.State):
         canciones: dict | None,
         historial: dict | None,
         albumes: list | None,
+        top_canciones_historicas: list | None,
     ) -> None:
         if perfil is None:
             self.error = "No se pudo autenticar con Spotify"
@@ -173,6 +198,7 @@ class StateSpotify(rx.State):
             self.canciones = {}
             self.historial = {}
             self.albumes = []
+            self.top_canciones_historicas = []
             return
 
         self.perfil = perfil
@@ -180,6 +206,7 @@ class StateSpotify(rx.State):
         self.canciones = canciones or {}
         self.historial = historial or {}
         self.albumes = albumes or []
+        self.top_canciones_historicas = top_canciones_historicas or []
         self.error = ""
 
     @rx.event(background=True)
@@ -190,14 +217,23 @@ class StateSpotify(rx.State):
             limite = self.limite
             rango = self.rango
 
-        perfil, artistas, canciones, historial, albumes = await asyncio.to_thread(
-            recuperar_datos,
-            limite,
-            rango,
+        perfil, artistas, canciones, historial, albumes, top_canciones_historicas = (
+            await asyncio.to_thread(
+                recuperar_datos,
+                limite,
+                rango,
+            )
         )
 
         async with self:
-            self._aplicar_datos(perfil, artistas, canciones, historial, albumes)
+            self._aplicar_datos(
+                perfil,
+                artistas,
+                canciones,
+                historial,
+                albumes,
+                top_canciones_historicas,
+            )
             self.loading = False
 
     @rx.event
