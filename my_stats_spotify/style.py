@@ -1,8 +1,5 @@
 from enum import Enum
 
-from reflex_base.vars.base import transform
-
-
 class Colors(Enum):
     PRIMARY = "#1ed760"
     SECONDARY = "#111"
