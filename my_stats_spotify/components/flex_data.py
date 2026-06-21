@@ -16,42 +16,42 @@ def flex_data_spotify() -> rx.Component:
                 rx.box(
                     rx.link(
                         "Mi Perfil",
+                        href=Route.MI_PERFIL.value,
                         style=flex_link_style,
                         ),
-                    href=Route.MI_PERFIL.value,
                     style=cajita1
                 ),
                 #top mis artistas
                 rx.box(
                     rx.link(
                         "Mi Top De Artistas Historico",
+                        href=Route.MI_TOP_ARTISTAS.value,
                         style=flex_link_style,
                         ),
-                    href=Route.MI_TOP_ARTISTAS.value,
                     style=cajita2),
                 #top canciones
                 rx.box(
                     rx.link(
                         "Mis Canciones Favoritas",
+                        href=Route.TOP_CANCIONES.value,
                         style=flex_link_style,
                         ),
-                    href=Route.TOP_CANCIONES.value,
                     style=cajita3),
                 #historial
                 rx.box(
                     rx.link(
                         "Mis Ultimas Reproduccions ",
+                        href=Route.HISTORIAL.value,
                         style=flex_link_style,
                         ),
-                    href=Route.HISTORIAL.value,
                     style=cajita4),
                 #top albumes
                 rx.box(
                     rx.link(
                         "Los Albumes Que Mas He Escuchado",
+                        href=Route.ALBUMES.value,
                         style=flex_link_style,
                         ),
-                    href=Route.ALBUMES.value,
                     style=cajita5),
             flex_wrap="wrap",
             width="80%",
