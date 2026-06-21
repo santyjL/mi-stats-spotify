@@ -30,7 +30,16 @@ class FontSize(Enum):
 
 
 body_cursor = dict[str, str](
-    cursor=f"url('{rx.asset("cursor.png")}'), auto"
+    cursor=f"url('{rx.asset("cursor.png")}'), auto",
+)
+
+pagina_titulo_style = dict[str, str](
+    font_family="Bitcount Grid Double",
+    font_size="2em",
+    text_shadow="3px 3px 5px #fff",
+    weight="bold",
+    text_align="center",
+    justify="center"
 )
 
 hero_style = dict[str, str](
@@ -54,7 +63,10 @@ footer_link_style = dict[str, str](
     color=Colors.WHITE.value,
     text_decoration="none",
     font_size=FontSize.SM.value,
-    _hover={"opacity": "0.8"},
+    _link={
+        "opacity": "0.8",
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
+    },
 )
 
 footer_heading_style = dict[str, str](
@@ -74,7 +86,10 @@ footer_social_style = dict[str, str](
     color=Colors.WHITE.value,
     font_weight="bold",
     text_decoration="none",
-    _hover={"opacity": "0.8"},
+    _link={
+        "opacity": "0.8",
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
+    },
 )
 
 footer_divider_style = dict[str, str](
@@ -88,7 +103,7 @@ buttons_style = dict[str, str](
     color=Colors.WHITE.value,
     padding="0.75rem 1.5rem",
     border_radius="0.5rem",
-    cursor="pointer",
+    cursor= f"url('{rx.asset("cursor_pointer.png")}'), auto"
 )
 
 texts_style = dict[str, str](
@@ -112,14 +127,13 @@ def flex_item(border_color) :
         padding="30px",
         align_items="center",
         flex_grow=1,
-        background=f"linear-gradient(360deg, transparent, {border_color} 99%)",
-        border_bottom=f"5px solid {border_color}",
-        border_top=f"3px solid {border_color}",
+        background=f"linear-gradient(360deg, {Colors.SECONDARY.value}, {border_color} 70%)",
         border_radius="25px",
         box_shadow="none",
         transition="box-shadow 0.4s 0.1s",
         _hover = {
-            "box-shadow": f"0 0 50px 10px {border_color}"
+            "box-shadow": f"0 0 50px 10px {border_color}",
+            "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
         }
     )
 
@@ -131,10 +145,12 @@ flex_link_style = dict[str,str](
     _hover={
         "text-decorate" : "none",
         "color" : f"{Colors.WHITE.value}",
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
     },
     _link={
         "text-decorate" : "none",
         "color" : f"{Colors.WHITE.value}",
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
     }
 )
 
@@ -244,7 +260,8 @@ album_cover_style = dict[str, str](
     font_family="montserrat",
     _hover={
         "transform" : "scale(1.25) rotate(15deg)",
-        "box_shadow" : f"0 0 20px 0 {Colors.ACCENT.value}"
+        "box_shadow" : f"0 0 20px 0 {Colors.ACCENT.value}",
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
     }
 )
 
@@ -408,6 +425,9 @@ artista_mes_row_style = dict[str, str](
     padding="0.5rem 0.75rem",
     border_bottom=f"1px solid {Colors.PRIMARY.value}",
     width="100%",
+    _hover= {
+        "cursor" : f"url('{rx.asset("cursor_pointer.png")}'), auto"
+    }
 )
 
 artista_mes_avatar_style = dict[str, str](

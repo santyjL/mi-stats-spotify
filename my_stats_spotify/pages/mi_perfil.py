@@ -3,6 +3,7 @@ import reflex as rx
 from ..components.footer import footer, separador
 from ..components.hero import hero
 from ..states.logic import ArtistaItem, StateSpotify
+from ..components.titulos_paginas import pagina_titulo
 from ..style import (
     artista_mes_avatar_style,
     artista_mes_nombre_style,
@@ -162,6 +163,7 @@ def mi_perfil_grid() -> rx.Component:
 def mi_perfil() -> rx.Component:
     return rx.box(
         hero(),
+        pagina_titulo("MI PERFIL"),
         mi_perfil_grid(),
         separador(),
         footer(),

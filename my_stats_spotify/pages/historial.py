@@ -3,6 +3,8 @@ import reflex as rx
 from ..components.footer import footer, separador
 from ..components.hero import hero
 from ..states.logic import HistorialItem, StateSpotify
+from ..components.titulos_paginas import pagina_titulo
+
 from ..style import (
     historial_artista_style,
     historial_card_style,
@@ -54,6 +56,7 @@ def ultimas_reproducciones() -> rx.Component:
 def historial() -> rx.Component:
     return rx.box(
         hero(),
+        pagina_titulo("MI HISTORIAL DE REPRODUCCION"),
         ultimas_reproducciones(),
         separador(),
         footer(),

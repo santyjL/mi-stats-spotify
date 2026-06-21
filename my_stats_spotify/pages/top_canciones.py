@@ -3,6 +3,7 @@ import reflex as rx
 from ..components.footer import footer, separador
 from ..components.hero import hero
 from ..states.logic import CancionTopItem, StateSpotify
+from ..components.titulos_paginas import pagina_titulo
 from ..style import (
     top_canciones_artista_style,
     top_canciones_cover_style,
@@ -51,6 +52,7 @@ def top_canciones_lista() -> rx.Component:
 def top_canciones() -> rx.Component:
     return rx.box(
         hero(),
+        pagina_titulo("MI TOP DE CANCIONES"),
         top_canciones_lista(),
         separador(),
         footer(),
