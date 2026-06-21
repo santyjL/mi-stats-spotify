@@ -2,6 +2,7 @@ import reflex as rx
 
 config = rx.Config(
     app_name="my_stats_spotify",
+    show_built_with_reflex=False,
     api_url="https://mi-stats-spotify-production.up.railway.app",
     plugins=[
         rx.plugins.SitemapPlugin(),
