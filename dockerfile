@@ -1,10 +1,10 @@
 FROM python:3.14
 
-WORKDIR /app
+WORKDIR /app_mi_stats_spotify
 
 COPY . .
 
-ENV VIRTUAL_ENV=/app/.venv_docker
+ENV VIRTUAL_ENV=/app_mi_stats_spotify/.venv_docker
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN python -m venv $VIRTUAL_ENV
 
