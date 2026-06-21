@@ -216,18 +216,25 @@ album_card_style = dict[str, str](
     flex_direction="column",
     align_items="center",
     gap="0.75rem",
-    padding="1rem 1.25rem",
+    padding="0.5rem",
     background_color=Colors.SECONDARY.value,
-    border=f"2px solid {Colors.PRIMARY.value}",
     border_radius="1rem",
+    
 )
 
 album_cover_style = dict[str, str](
-    width="140px",
-    height="140px",
+    width="160px",
+    height="160px",
     border_radius="0.5rem",
     border=f"2px solid {Colors.WHITE.value}",
     flex_shrink="0",
+    transform="none",
+    transition="transform 0.2s",
+    box_shadow="none",
+    _hover={
+        "transform" : "scale(1.25) rotate(0.03turn)",
+        "box_shadow" : f"0 0 20px 0 {Colors.ACCENT.value}"
+    }
 )
 
 album_nombre_link_style = dict[str, str](

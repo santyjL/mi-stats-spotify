@@ -18,6 +18,10 @@ def album_card(album: AlbumItem) -> rx.Component:
             src=album["image_url"],
             fallback=album["nombre"],
             style=album_cover_style,
+            on_click=rx.redirect(
+                path=album["spotify_url"],
+                is_external=True
+            )
         ),
         rx.link(
             album["nombre"],
