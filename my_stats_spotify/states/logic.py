@@ -20,6 +20,7 @@ class HistorialItem(TypedDict):
     album_name:str
     artist: str
     image_url: str
+    preview_url: str
 
 
 class AlbumItem(TypedDict):
@@ -161,6 +162,7 @@ class StateSpotify(rx.State):
             )
             album = track.get("album") or {}
             nombre_album= album.get("name")or []
+            preview = track.get("preview_url") or {}
             imagenes = album.get("images") or []
             url = imagenes[0].get("url", "") if imagenes else ""
             resultado.append(
@@ -169,6 +171,7 @@ class StateSpotify(rx.State):
                     "album_name": nombre_album,
                     "artist": artista,
                     "image_url": url,
+                    "preview_url": preview
                 }
             )
         return resultado

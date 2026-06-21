@@ -36,6 +36,7 @@ def historial_card(cancion: HistorialItem) -> rx.Component:
             spacing="1",
             align="start",
         ),
+        rx.audio(src=cancion["preview_url"]),
         style=historial_card_style,
         width=["100%", "calc(50% - 0.75rem)"],
         align="center",
