@@ -10,6 +10,7 @@ from ..style import (
     top_canciones_nombre_style,
     top_canciones_num_style,
     top_canciones_row_style,
+    body_cursor
 )
 
 
@@ -53,4 +54,5 @@ def top_canciones() -> rx.Component:
         top_canciones_lista(),
         separador(),
         footer(),
+        style=body_cursor
     )

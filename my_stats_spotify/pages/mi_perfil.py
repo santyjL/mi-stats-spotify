@@ -17,6 +17,7 @@ from ..style import (
     reproduccion_cover_style,
     reproduccion_estado_style,
     reproduccion_nombre_style,
+    body_cursor
 )
 
 
@@ -164,4 +165,5 @@ def mi_perfil() -> rx.Component:
         mi_perfil_grid(),
         separador(),
         footer(),
+        style=body_cursor
     )

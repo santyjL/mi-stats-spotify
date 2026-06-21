@@ -18,6 +18,7 @@ def hero() -> rx.Component:
         ),
         rx.heading("COMIENZA A ESCUCHAR MUSICA DE FORMA DIFERENTE",
                     size="9",
+                    font_family="Bitcount Grid Double",
                     text_align="center",
                     text_wrap="balance",
                     text_shadow=f"0 0 40px {Colors.ACCENT.value}"),

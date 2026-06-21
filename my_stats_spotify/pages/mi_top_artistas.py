@@ -8,6 +8,7 @@ from ..style import (
     artista_card_style,
     artista_nombre_style,
     top_artistas_grid_style,
+    body_cursor
 )
 
 
@@ -46,4 +47,5 @@ def mi_top_artistas() -> rx.Component:
         top_de_artistas(),
         separador(),
         footer(),
+        style=body_cursor
     )

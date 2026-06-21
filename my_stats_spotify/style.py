@@ -1,4 +1,5 @@
 from enum import Enum
+import reflex as rx
 
 class Colors(Enum):
     PRIMARY = "#1ed760"
@@ -28,11 +29,16 @@ class FontSize(Enum):
     DISPLAY = "3rem"
 
 
+body_cursor = dict[str, str](
+    cursor=f"url('{rx.asset("cursor.png")}'), auto"
+)
+
 hero_style = dict[str, str](
     background=Colors.SECONDARY.value,
     color=Colors.WHITE.value,
     padding="4rem 1rem",
     text_wrap="pretty",
+    font_family="Bitcount Grid Double"
     
 )
 
@@ -41,6 +47,7 @@ footer_style = dict[str, str](
     color=Colors.WHITE.value,
     padding="2rem 1rem",
     width="100%",
+    font_family="montserrat"
 )
 
 footer_link_style = dict[str, str](
@@ -87,6 +94,7 @@ buttons_style = dict[str, str](
 texts_style = dict[str, str](
     color=Colors.BLACK.value,
     font_size=FontSize.MD.value,
+    font_family="montserrat"
 )
 
 spotify_style = dict[str, str](
@@ -138,6 +146,7 @@ top_artistas_grid_style = dict[str, str](
     max_width="960px",
     margin="0 auto",
     justify_content="center",
+    font_family="montserrat",
 )
 
 artista_card_style = dict[str, str](
@@ -177,6 +186,7 @@ historial_card_style = dict[str, str](
     align_items="center",
     gap="1rem",
     padding="1rem 1.25rem",
+    font_family="montserrat",
     background_color=Colors.SECONDARY.value,
     border=f"2px solid {Colors.PRIMARY.value}",
     border_radius="1rem",
@@ -231,8 +241,9 @@ album_cover_style = dict[str, str](
     transform="none",
     transition="transform 0.2s",
     box_shadow="none",
+    font_family="montserrat",
     _hover={
-        "transform" : "scale(1.25) rotate(0.03turn)",
+        "transform" : "scale(1.25) rotate(15deg)",
         "box_shadow" : f"0 0 20px 0 {Colors.ACCENT.value}"
     }
 )
@@ -257,6 +268,7 @@ top_canciones_list_style = dict[str, str](
     flex_direction="column",
     width="80%",
     margin="0 auto",
+    font_family="montserrat",
     padding="2rem 1rem",
 )
 
@@ -331,6 +343,7 @@ mi_perfil_card_style = dict[str, str](
     flex_direction="column",
     gap="0.75rem",
     padding="1.5rem",
+    font_family="montserrat",
     background_color=Colors.SECONDARY.value,
     border=f"2px solid {Colors.PRIMARY.value}",
     border_radius="1rem",

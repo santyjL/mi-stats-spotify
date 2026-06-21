@@ -9,6 +9,7 @@ from ..style import (
     historial_cover_style,
     historial_grid_style,
     historial_nombre_style,
+    body_cursor
 )
 
 
@@ -56,4 +57,5 @@ def historial() -> rx.Component:
         ultimas_reproducciones(),
         separador(),
         footer(),
+        style=body_cursor
     )

@@ -3,7 +3,7 @@ import reflex as rx
 from ..components.flex_data import flex_data_spotify
 from ..components.footer import footer, separador
 from ..components.hero import hero
-from ..style import main_style
+from ..style import main_style, body_cursor
 
 
 def main() -> rx.Component:
@@ -18,4 +18,5 @@ def home() -> rx.Component:
         main(),
         separador(),
         footer(),
+        style=body_cursor
     )

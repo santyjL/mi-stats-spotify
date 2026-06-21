@@ -9,6 +9,7 @@ from ..style import (
     album_cover_style,
     album_nombre_link_style,
     albumes_grid_style,
+    body_cursor
 )
 
 
@@ -56,4 +57,5 @@ def albumes() -> rx.Component:
         top_albumes(),
         separador(),
         footer(),
+        style=body_cursor
     )

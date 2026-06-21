@@ -10,7 +10,12 @@ from .routers import Route
 from .states.logic import StateSpotify
 
 
-app = rx.App()
+app = rx.App(
+    stylesheets=[
+        "https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double:wght@100..900&display=swap",
+        "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        ]
+)
 app.add_page(home, route=Route.HOME.value, on_load=StateSpotify.cargar_datos)
 app.add_page(albumes, route=Route.ALBUMES.value, on_load=StateSpotify.cargar_datos)
 app.add_page(historial, route=Route.HISTORIAL.value, on_load=StateSpotify.cargar_datos)
