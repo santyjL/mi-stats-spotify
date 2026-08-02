@@ -3,10 +3,10 @@ from typing import TypedDict
 
 import reflex as rx
 
+from ..services.cache import load_snapshot
 from ..services.spotify_api import (
     _PLANES,
     _valor_perfil,
-    recuperar_datos,
 )
 
 
@@ -299,27 +299,31 @@ class StateSpotify(rx.State):
 
     @rx.event(background=True)
     async def cargar_datos(self):
+        """Carga el snapshot generado por GitHub Actions (sin llamar a Spotify)."""
         async with self:
             self.loading = True
             self.error = ""
-            limite = self.limite
-            rango = self.rango
 
-        (
-            perfil,
-            artistas,
-            canciones,
-            historial,
-            albumes,
-            reproduccion_actual,
-            artistas_mes,
-        ) = await asyncio.to_thread(
-            recuperar_datos,
-            limite,
-            rango,
-        )
+        snapshot = await asyncio.to_thread(load_snapshot)
 
         async with self:
+            if snapshot is None:
+                self.error = (
+                    "No hay datos en caché. Espera al próximo refresh de "
+                    "GitHub Actions o ejecuta scripts/refresh_spotify_data.py"
+                )
+                self.loading = False
+                return
+
+            (
+                perfil,
+                artistas,
+                canciones,
+                historial,
+                albumes,
+                reproduccion_actual,
+                artistas_mes,
+            ) = snapshot
             self._aplicar_datos(
                 perfil,
                 artistas,
@@ -333,5 +337,6 @@ class StateSpotify(rx.State):
 
     @rx.event
     def cambiar_rango(self, rango: str):
+        # El rango lo fija el job de Actions; aquí solo recarga la caché.
         self.rango = rango
         return StateSpotify.cargar_datos

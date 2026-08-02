@@ -1,0 +1,61 @@
+# Actualiza el snapshot de Spotify cada 3 minutos y lo publica en la rama
+# `spotify-data` (orphan). Railway no se redespliega; la app lee el JSON
+# desde raw.githubusercontent.com y deja de llamar a Spotify en cada visita.
+#
+# Secretos requeridos en el repositorio (Settings → Secrets and variables → Actions):
+#   SPOTIFY_CLIENT_ID
+#   SPOTIFY_CLIENT_SECRET
+#   SPOTIFY_REFRESH_TOKEN
+#
+# Nota: GitHub puede retrasar crons cortos bajo carga; `workflow_dispatch`
+# permite forzar una actualización manual.
+
+name: Refresh Spotify data
+
+on:
+  schedule:
+    - cron: "*/3 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-spotify-data
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-dotenv requests
+
+      - name: Fetch Spotify snapshot
+        env:
+          SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+          SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+          SPOTIFY_REFRESH_TOKEN: ${{ secrets.SPOTIFY_REFRESH_TOKEN }}
+        run: python scripts/refresh_spotify_data.py
+
+      - name: Publish snapshot to spotify-data branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./data
+          publish_branch: spotify-data
+          force_orphan: true
+          commit_message: "chore: refresh Spotify cache"
+          enable_jekyll: true
