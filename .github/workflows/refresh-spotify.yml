@@ -14,7 +14,7 @@ name: Refresh Spotify data
 
 on:
   schedule:
-    - cron: "*/3 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
